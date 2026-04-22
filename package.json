@@ -1,0 +1,30 @@
+{
+  "type": "module",
+  "name": "@msw/cloudflare",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "vitest"
+  },
+  "keywords": [
+    "cloudflare",
+    "mock",
+    "api",
+    "intercept",
+    "request",
+    "network",
+    "test"
+  ],
+  "author": "Artem Zakharchenko <kettanaito@gmail.com>",
+  "license": "MIT",
+  "dependencies": {
+    "@mswjs/interceptors": "^0.41.4"
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-pool-workers": "^0.14.9",
+    "msw": "^2.13.4",
+    "typescript": "^6.0.3",
+    "vitest": "^4.1.5"
+  }
+}
