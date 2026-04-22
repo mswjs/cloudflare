@@ -19,7 +19,7 @@
   "author": "Artem Zakharchenko <kettanaito@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "@mswjs/interceptors": "^0.41.4"
+    "@mswjs/interceptors": "^0.41.5"
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.14.9",
