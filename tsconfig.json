@@ -7,5 +7,7 @@
     "target": "esnext",
     "module": "preserve",
     "moduleResolution": "bundler",
+    "verbatimModuleSyntax": true,
+    "types": ["@cloudflare/workers-types"],
   },
 }

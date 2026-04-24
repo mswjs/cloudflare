@@ -1,5 +1,5 @@
 export default {
-  async fetch(req, env, ctx) {
+  async fetch(request, env, ctx) {
     return fetch('http://localhost/resource')
   },
 } satisfies ExportedHandler<Env>
