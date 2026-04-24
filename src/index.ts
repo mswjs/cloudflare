@@ -1,9 +1,10 @@
-import { bypass } from 'msw'
+import { bypass, type AnyHandler } from 'msw'
 import {
   defineNetwork,
   InterceptorSource,
   HttpNetworkFrame,
 } from 'msw/experimental'
+import { createRequestId, resolveWebSocketUrl } from '@mswjs/interceptors'
 import { FetchInterceptor } from '@mswjs/interceptors/fetch'
 import {
   WebSocketInterceptor,
@@ -13,7 +14,6 @@ import {
   type WebSocketClientConnectionProtocol,
   type WebSocketServerConnectionProtocol,
 } from '@mswjs/interceptors/WebSocket'
-import { createRequestId } from '@mswjs/interceptors'
 
 export function setupNetwork() {
   const upgradeRequests = new WeakSet()
@@ -26,20 +26,21 @@ export function setupNetwork() {
         return
       }
 
+      const url = new URL(request.url)
+
       if (
         request.method === 'GET' &&
-        request.headers.get('upgrade') === 'websocket'
+        request.headers.get('upgrade') === 'websocket' &&
+        hasWebSocketHandler(url, network.listHandlers())
       ) {
         upgradeRequests.add(request)
         const [client, server] = Object.values(new WebSocketPair())
 
-        const connectionUrl = new URL(request.url)
-        connectionUrl.protocol =
-          connectionUrl.protocol === 'https:' ? 'wss:' : 'ws:'
+        const connectionUrl = resolveWebSocketUrl(url)
 
         webSocketInterceptor['emitter'].emit('connection', {
           client: new CloudflareWebSocketClientConnection({
-            url: connectionUrl.href,
+            url: connectionUrl,
             socket: server,
           }),
           server: new CloudflareWebSocketServerConnection({
@@ -81,6 +82,27 @@ export function setupNetwork() {
   })
 
   return network
+}
+
+function hasWebSocketHandler(
+  url: URL,
+  handlers: ReadonlyArray<AnyHandler>,
+): boolean {
+  const wsUrl = new URL(resolveWebSocketUrl(url))
+
+  for (const handler of handlers) {
+    if (
+      handler.kind === 'websocket' &&
+      handler.predicate({
+        url,
+        parsedResult: handler.parse({ url: wsUrl }),
+      })
+    ) {
+      return true
+    }
+  }
+
+  return false
 }
 
 class CloudflareWebSocketClientConnection implements WebSocketClientConnectionProtocol {

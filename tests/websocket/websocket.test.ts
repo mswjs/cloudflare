@@ -1,10 +1,9 @@
+import { inject } from 'vitest'
 import { env } from 'cloudflare:workers'
 import { createExecutionContext } from 'cloudflare:test'
-
 import { ws } from 'msw'
 import { setupNetwork } from '@msw/cloudflare'
 import worker from './worker'
-import { inject } from 'vitest'
 
 const network = setupNetwork()
 

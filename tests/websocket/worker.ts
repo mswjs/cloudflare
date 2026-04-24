@@ -23,7 +23,7 @@ export default {
       }
 
       const targetUrl = decodeURIComponent(
-        url.searchParams.get('target') || `wss://localhost/ws${url.pathname}`,
+        url.searchParams.get('target') || `ws://localhost/ws${url.pathname}`,
       )
 
       const { webSocket } = await fetch(targetUrl, {
