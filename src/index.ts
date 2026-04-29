@@ -1,5 +1,9 @@
 import { bypass, ws } from 'msw'
-import { defineNetwork, InterceptorSource } from 'msw/experimental'
+import {
+  defineNetwork,
+  InterceptorSource,
+  InMemoryHandlersController,
+} from 'msw/experimental'
 import { createRequestId, resolveWebSocketUrl } from '@mswjs/interceptors'
 import { FetchInterceptor } from '@mswjs/interceptors/fetch'
 import {
@@ -10,7 +14,6 @@ import {
   type WebSocketClientConnectionProtocol,
   type WebSocketServerConnectionProtocol,
 } from '@mswjs/interceptors/WebSocket'
-import { InMemoryHandlersController } from '../../msw/lib/core/experimental/handlers-controller.mjs'
 
 export function setupNetwork() {
   const handlersController = new InMemoryHandlersController([])
