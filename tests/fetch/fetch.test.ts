@@ -7,11 +7,6 @@ import worker from './worker'
 const network = setupNetwork()
 
 beforeAll(() => {
-  network.configure({
-    context: {
-      quiet: true,
-    },
-  })
   network.enable()
 })
 
