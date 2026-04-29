@@ -24,7 +24,7 @@ afterAll(() => {
   network.disable()
 })
 
-it('intercepts a WebSocket connection established in a worker', async () => {
+it('intercepts a WebSocket connection via the WebSocket class', async () => {
   const api = ws.link('wss://localhost/ws')
 
   network.use(

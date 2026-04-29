@@ -1,9 +1,5 @@
-import { bypass, type AnyHandler } from 'msw'
-import {
-  defineNetwork,
-  InterceptorSource,
-  HttpNetworkFrame,
-} from 'msw/experimental'
+import { bypass, ws } from 'msw'
+import { defineNetwork, InterceptorSource } from 'msw/experimental'
 import { createRequestId, resolveWebSocketUrl } from '@mswjs/interceptors'
 import { FetchInterceptor } from '@mswjs/interceptors/fetch'
 import {
@@ -14,70 +10,56 @@ import {
   type WebSocketClientConnectionProtocol,
   type WebSocketServerConnectionProtocol,
 } from '@mswjs/interceptors/WebSocket'
+import { InMemoryHandlersController } from '../../msw/lib/core/experimental/handlers-controller.mjs'
 
 export function setupNetwork() {
-  const upgradeRequests = new WeakSet()
-  const fetchInterceptor = new FetchInterceptor()
+  const handlersController = new InMemoryHandlersController([])
 
-  fetchInterceptor.on('request', ({ request, controller }) => {
-    if (request.headers.get('accept') === 'msw/passthrough') {
+  ws.onUpgrade = async ({ requestId, request }) => {
+    const handlers = handlersController.getHandlersByKind('websocket')
+
+    if (handlers.length === 0) {
       return
     }
 
     const url = new URL(request.url)
+    const connectionUrl = resolveWebSocketUrl(url)
+    const [client, server] = Object.values(new WebSocketPair())
 
-    if (
-      request.method === 'GET' &&
-      request.headers.get('upgrade') === 'websocket' &&
-      network.listHandlers().some((handler) => {
-        return handler.kind === 'websocket' && handler.test(url)
-      })
-    ) {
-      upgradeRequests.add(request)
-      const [client, server] = Object.values(new WebSocketPair())
-
-      const connectionUrl = resolveWebSocketUrl(url)
-
-      webSocketInterceptor['emitter'].emit('connection', {
-        client: new CloudflareWebSocketClientConnection({
-          url: connectionUrl,
-          socket: server,
-        }),
-        server: new CloudflareWebSocketServerConnection({
-          url: request.url,
-        }),
-        info: {
-          protocols: [],
-        },
-      })
-
-      return controller.respondWith(
-        new Response(null, {
-          status: 101,
-          webSocket: client,
-        }),
-      )
+    const connection = {
+      client: new CloudflareWebSocketClientConnection({
+        url: connectionUrl,
+        socket: server,
+      }),
+      server: new CloudflareWebSocketServerConnection({
+        url: request.url,
+      }),
+      info: {
+        protocols: [],
+      },
     }
-  })
 
-  const webSocketInterceptor = new WebSocketInterceptor()
+    for (const handler of handlers) {
+      await handler.run({
+        requestId,
+        request,
+        ...connection,
+      })
+    }
+
+    return new Response(null, {
+      status: 101,
+      webSocket: client,
+    })
+  }
 
   const network = defineNetwork({
     sources: [
       new InterceptorSource({
-        interceptors: [fetchInterceptor, webSocketInterceptor],
+        interceptors: [new FetchInterceptor(), new WebSocketInterceptor()],
       }),
     ],
-    onUnhandledFrame({ frame, defaults }) {
-      if (
-        frame instanceof HttpNetworkFrame &&
-        upgradeRequests.has(frame.data.request)
-      ) {
-        return
-      }
-
-      defaults.warn()
-    },
+    handlers: handlersController,
   })
 
   return network
