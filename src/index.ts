@@ -63,6 +63,9 @@ export function setupNetwork() {
       }),
     ],
     handlers: handlersController,
+    context: {
+      quiet: true,
+    },
   })
 
   return network
