@@ -31,7 +31,9 @@ export function setupNetwork() {
       if (
         request.method === 'GET' &&
         request.headers.get('upgrade') === 'websocket' &&
-        hasWebSocketHandler(url, network.listHandlers())
+        network.listHandlers().some((handler) => {
+          return handler.kind === 'websocket' && handler.test(url)
+        })
       ) {
         upgradeRequests.add(request)
         const [client, server] = Object.values(new WebSocketPair())
@@ -82,27 +84,6 @@ export function setupNetwork() {
   })
 
   return network
-}
-
-function hasWebSocketHandler(
-  url: URL,
-  handlers: ReadonlyArray<AnyHandler>,
-): boolean {
-  const wsUrl = new URL(resolveWebSocketUrl(url))
-
-  for (const handler of handlers) {
-    if (
-      handler.kind === 'websocket' &&
-      handler.predicate({
-        url,
-        parsedResult: handler.parse({ url: wsUrl }),
-      })
-    ) {
-      return true
-    }
-  }
-
-  return false
 }
 
 class CloudflareWebSocketClientConnection implements WebSocketClientConnectionProtocol {
