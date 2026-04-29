@@ -19,49 +19,46 @@ export function setupNetwork() {
   const upgradeRequests = new WeakSet()
   const fetchInterceptor = new FetchInterceptor()
 
-  fetchInterceptor['emitter'].prependListener(
-    'request',
-    ({ request, controller }) => {
-      if (request.headers.get('accept') === 'msw/passthrough') {
-        return
-      }
+  fetchInterceptor.on('request', ({ request, controller }) => {
+    if (request.headers.get('accept') === 'msw/passthrough') {
+      return
+    }
 
-      const url = new URL(request.url)
+    const url = new URL(request.url)
 
-      if (
-        request.method === 'GET' &&
-        request.headers.get('upgrade') === 'websocket' &&
-        network.listHandlers().some((handler) => {
-          return handler.kind === 'websocket' && handler.test(url)
-        })
-      ) {
-        upgradeRequests.add(request)
-        const [client, server] = Object.values(new WebSocketPair())
+    if (
+      request.method === 'GET' &&
+      request.headers.get('upgrade') === 'websocket' &&
+      network.listHandlers().some((handler) => {
+        return handler.kind === 'websocket' && handler.test(url)
+      })
+    ) {
+      upgradeRequests.add(request)
+      const [client, server] = Object.values(new WebSocketPair())
 
-        const connectionUrl = resolveWebSocketUrl(url)
+      const connectionUrl = resolveWebSocketUrl(url)
 
-        webSocketInterceptor['emitter'].emit('connection', {
-          client: new CloudflareWebSocketClientConnection({
-            url: connectionUrl,
-            socket: server,
-          }),
-          server: new CloudflareWebSocketServerConnection({
-            url: request.url,
-          }),
-          info: {
-            protocols: [],
-          },
-        })
+      webSocketInterceptor['emitter'].emit('connection', {
+        client: new CloudflareWebSocketClientConnection({
+          url: connectionUrl,
+          socket: server,
+        }),
+        server: new CloudflareWebSocketServerConnection({
+          url: request.url,
+        }),
+        info: {
+          protocols: [],
+        },
+      })
 
-        return controller.respondWith(
-          new Response(null, {
-            status: 101,
-            webSocket: client,
-          }),
-        )
-      }
-    },
-  )
+      return controller.respondWith(
+        new Response(null, {
+          status: 101,
+          webSocket: client,
+        }),
+      )
+    }
+  })
 
   const webSocketInterceptor = new WebSocketInterceptor()
 
