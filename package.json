@@ -2,10 +2,18 @@
   "type": "module",
   "name": "@msw/cloudflare",
   "version": "0.0.0",
-  "description": "",
-  "main": "index.js",
+  "description": "Mock API in Cloudflare with Mock Service Worker.",
+  "exports": {
+    ".": "./build/index.mjs"
+  },
+  "files": [
+    "./build"
+  ],
   "scripts": {
-    "test": "vitest"
+    "start": "tsdown -w",
+    "test": "vitest",
+    "lint": "publint",
+    "build": "tsdown"
   },
   "keywords": [
     "cloudflare",
@@ -28,7 +36,9 @@
     "@cloudflare/vitest-pool-workers": "^0.14.9",
     "@cloudflare/workers-types": "^4.20260424.1",
     "@epic-web/test-server": "^0.1.6",
-    "msw": "^2.14.1",
+    "msw": "^2.14.2",
+    "publint": "^0.3.18",
+    "tsdown": "^0.21.10",
     "typescript": "^6.0.3",
     "vitest": "^4.1.5"
   }
