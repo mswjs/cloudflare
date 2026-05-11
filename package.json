@@ -36,7 +36,7 @@
     "@cloudflare/vitest-pool-workers": "^0.14.9",
     "@cloudflare/workers-types": "^4.20260424.1",
     "@epic-web/test-server": "^0.1.6",
-    "msw": "^2.14.2",
+    "msw": "^2.14.6",
     "publint": "^0.3.18",
     "tsdown": "^0.21.10",
     "typescript": "^6.0.3",

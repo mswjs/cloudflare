@@ -36,7 +36,7 @@ it('intercepts a fetch request made in a worker', async () => {
   await expect.soft(response.json()).resolves.toEqual({ mocked: true })
 })
 
-it('intercepts a fetch request in a worker called as "exports.default.fetch"', async () => {
+it('intercepts a fetch request in a worker used as "exports.default.fetch"', async () => {
   network.use(
     http.get('http://localhost/resource', () => {
       return HttpResponse.json({ mocked: true })
