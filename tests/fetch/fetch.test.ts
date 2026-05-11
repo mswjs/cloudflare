@@ -1,4 +1,4 @@
-import { env } from 'cloudflare:workers'
+import { env, exports } from 'cloudflare:workers'
 import { createExecutionContext } from 'cloudflare:test'
 import { http, HttpResponse } from 'msw'
 import { setupNetwork } from '@msw/cloudflare'
@@ -31,6 +31,20 @@ it('intercepts a fetch request made in a worker', async () => {
     env,
     ctx,
   )
+
+  expect.soft(response.status).toBe(200)
+  await expect.soft(response.json()).resolves.toEqual({ mocked: true })
+})
+
+it('intercepts a fetch request in a worker used as "exports.default.fetch"', async () => {
+  network.use(
+    http.get('http://localhost/resource', () => {
+      return HttpResponse.json({ mocked: true })
+    }),
+  )
+
+  const ctx = createExecutionContext()
+  const response = await exports.default.fetch('http://localhost/')
 
   expect.soft(response.status).toBe(200)
   await expect.soft(response.json()).resolves.toEqual({ mocked: true })

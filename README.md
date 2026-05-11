@@ -53,7 +53,7 @@ afterAll(() => {
   network.disable()
 })
 
-it('', async () => {
+it('responds with the user id', async () => {
   network.use(
     http.get('https://api.example.com/user', () => {
       return HttpResponse.json({ id: 1, name: 'John Maverick' })
