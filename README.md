@@ -7,7 +7,7 @@ Develop and test Cloudflare applications with Mock Service Worker.
 ### Install
 
 ```sh
-npm i pkg.pr.new/mswjs/cloudflare/@msw/cloudflare@beta msw
+npm i https://pkg.pr.new/mswjs/cloudflare/@msw/cloudflare@beta msw
 ```
 
 > This package requires `msw` as a peer dependency.
