@@ -31,8 +31,13 @@ jobs:
           node-version: 24
           cache: 'pnpm'
 
+      - name: Set up Git
+        run: |
+          git config --local user.name "Artem Zakharchenko"
+          git config --local user.email "kettanaito@gmail.com"
+
       - name: Install dependencies
-        run: pnpm install
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         run: pnpm build
