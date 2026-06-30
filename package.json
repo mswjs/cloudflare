@@ -13,7 +13,8 @@
     "start": "tsdown -w",
     "test": "vitest",
     "lint": "publint",
-    "build": "tsdown"
+    "build": "tsdown",
+    "publish": "release publish"
   },
   "keywords": [
     "cloudflare",
@@ -29,6 +30,9 @@
   "peerDependencies": {
     "msw": ">=2.14.1"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "dependencies": {
     "@mswjs/interceptors": "^0.41.6"
   },
@@ -36,6 +40,7 @@
     "@cloudflare/vitest-pool-workers": "^0.14.9",
     "@cloudflare/workers-types": "^4.20260424.1",
     "@epic-web/test-server": "^0.1.6",
+    "@ossjs/release": "^0.11.0",
     "msw": "^2.14.6",
     "publint": "^0.3.18",
     "tsdown": "^0.21.10",
