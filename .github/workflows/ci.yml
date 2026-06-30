@@ -45,6 +45,6 @@ jobs:
 
       - name: Release
         if: github.ref == 'refs/heads/main'
-        run: pnpm publish
+        run: pnpm release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}

@@ -14,7 +14,7 @@
     "test": "vitest",
     "lint": "publint",
     "build": "tsdown",
-    "publish": "release publish"
+    "release": "release publish"
   },
   "keywords": [
     "cloudflare",
