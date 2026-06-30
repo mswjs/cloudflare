@@ -33,6 +33,11 @@
   "publishConfig": {
     "access": "public"
   },
+  "homepage": "https://github.com/mswjs/cloudflare",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mswjs/cloudflare.git"
+  },
   "dependencies": {
     "@mswjs/interceptors": "^0.41.6"
   },
