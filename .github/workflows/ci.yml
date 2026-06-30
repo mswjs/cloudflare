@@ -6,6 +6,10 @@ on:
   pull_request:
   workflow_dispatch:
 
+permissions:
+  contents: read
+  id-token: write
+
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -16,7 +20,7 @@ jobs:
       - name: Set up pnpm
         uses: pnpm/action-setup@v4
         with:
-          version: 9.15.0
+          version: 11.5.2
 
       - name: Set up Node.js
         uses: actions/setup-node@v4
@@ -35,3 +39,9 @@ jobs:
 
       - name: Tests
         run: pnpm test
+
+      - name: Release
+        if: github.ref == 'refs/heads/main'
+        run: pnpm publish
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_ADMIN_TOKEN }}
