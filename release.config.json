@@ -3,7 +3,8 @@
   "profiles": [
     {
       "name": "latest",
-      "use": "NPM_CONFIG_PROVENANCE=true pnpm publish --no-git-checks"
+      "use": "NPM_CONFIG_PROVENANCE=true pnpm publish --no-git-checks",
+      "prerelease": true
     }
   ]
 }
