@@ -1,6 +1,6 @@
 import { env, exports } from 'cloudflare:workers'
 import { createExecutionContext } from 'cloudflare:test'
-import { http, HttpResponse } from 'msw'
+import { http, HttpResponse } from 'msw/http'
 import { setupNetwork } from '@msw/cloudflare'
 import worker from './worker'
 
