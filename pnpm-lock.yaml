@@ -1293,7 +1293,7 @@ packages:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
   msw@https://pkg.pr.new/msw@1536617:
-    resolution: {integrity: sha512-ZkFC6lVe6PbFXq6stCdTJdZSedgNfgjjlr21O6TBx/g1GH/2S9xLQtLLUQmn8KdCuaZ59rx5mDMbRqXLtNnP4Q==, tarball: https://pkg.pr.new/msw@1536617}
+    resolution: {tarball: https://pkg.pr.new/msw@1536617}
     version: 2.15.0
     engines: {node: '>=22'}
     hasBin: true
