@@ -1,7 +1,9 @@
 allowBuilds:
   esbuild: true
   msw: true
+  msw@https://pkg.pr.new/msw@2692: true
   sharp: true
   workerd: true
 minimumReleaseAgeExclude:
-  - '@mswjs/interceptors@0.45.3'
+  - '@mswjs/interceptors@0.45.3 || 0.45.5'
+  - 'rettime@0.11.12'
