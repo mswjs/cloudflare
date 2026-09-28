@@ -1,4 +1,5 @@
-import { bypass, ws } from 'msw'
+import { ws } from 'msw/ws'
+import { bypass } from 'msw/utils/bypass'
 import {
   defineNetwork,
   InterceptorSource,
@@ -9,10 +10,11 @@ import { FetchInterceptor } from '@mswjs/interceptors/fetch'
 import {
   WebSocketInterceptor,
   type WebSocketData,
+  type WebSocketConnectionEventData,
   type WebSocketServerEventMap,
   type WebSocketClientEventMap,
-  type WebSocketClientConnectionProtocol,
-  type WebSocketServerConnectionProtocol,
+  type WebSocketClientHandle,
+  type WebSocketServerHandle,
 } from '@mswjs/interceptors/WebSocket'
 
 export function setupNetwork() {
@@ -29,7 +31,7 @@ export function setupNetwork() {
     const connectionUrl = resolveWebSocketUrl(url)
     const [client, server] = Object.values(new WebSocketPair())
 
-    const connection = {
+    const connection: WebSocketConnectionEventData = {
       client: new CloudflareWebSocketClientConnection({
         url: connectionUrl,
         socket: server,
@@ -71,7 +73,7 @@ export function setupNetwork() {
   return network
 }
 
-class CloudflareWebSocketClientConnection implements WebSocketClientConnectionProtocol {
+class CloudflareWebSocketClientConnection implements WebSocketClientHandle {
   #socket: WebSocket
 
   public id: string
@@ -116,7 +118,7 @@ class CloudflareWebSocketClientConnection implements WebSocketClientConnectionPr
   }
 }
 
-class CloudflareWebSocketServerConnection implements WebSocketServerConnectionProtocol {
+class CloudflareWebSocketServerConnection implements WebSocketServerHandle {
   #url: string
   #pendingSocket: PromiseWithResolvers<WebSocket>
 

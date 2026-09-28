@@ -3,3 +3,7 @@ allowBuilds:
   msw: true
   sharp: true
   workerd: true
+minimumReleaseAgeExclude:
+  - '@mswjs/interceptors@0.45.5'
+  - 'rettime@0.11.12'
+  - msw@3.0.0

@@ -1,7 +1,7 @@
 import { inject } from 'vitest'
 import { env } from 'cloudflare:workers'
 import { createExecutionContext } from 'cloudflare:test'
-import { ws } from 'msw'
+import { ws } from 'msw/ws'
 import { setupNetwork } from '@msw/cloudflare'
 import worker from './worker'
 
