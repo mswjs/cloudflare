@@ -47,7 +47,7 @@
     "@cloudflare/workers-types": "^4.20260424.1",
     "@epic-web/test-server": "^0.1.6",
     "@ossjs/release": "^0.11.2",
-    "msw": "https://pkg.pr.new/msw@2692",
+    "msw": "^3.0.0",
     "publint": "^0.3.24",
     "tsdown": "^0.23.0",
     "typescript": "^6.0.3",
