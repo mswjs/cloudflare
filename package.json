@@ -27,6 +27,7 @@
   ],
   "author": "Artem Zakharchenko <kettanaito@gmail.com>",
   "license": "MIT",
+  "packageManager": "pnpm@11.27.1",
   "peerDependencies": {
     "msw": ">=3"
   },
